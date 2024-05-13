@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "GDocs Emoji Favicon",
+  "version": "0.1",
+  "description": "Automatically changes the favicon of Google docs to first emoji in the doc title.",
+  "content_scripts": [{
+    "matches": ["https://docs.google.com/*"],
+    "js": ["content.js"]
+  }]
+}
