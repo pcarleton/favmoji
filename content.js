@@ -1,9 +1,19 @@
 
-
+// Get the first emoji from a string, accounting for ZWJ, modifiers, and flags.
 function getFirstEmoji(str) {
-    const emojiRegex = /[\u{1F300}-\u{1F5FF}\u{1F900}-\u{1F9FF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F1E6}-\u{1F1FF}]/u;
-    const match = str.match(emojiRegex);
-    return match ? match[0] : null;
+    const modifiers = '(\\p{EMod}+|\\u{FE0F}\\u{20E3}?|[\\u{E0020}-\\u{E007E}]+\\u{E007F})?';
+    const pieces = [
+        // Regional Indicator Symbol (flags)
+        "\\p{RI}\\p{RI}",
+        // Emoji character + ZWJ
+        "\\p{Emoji}" + modifiers + "(\\u{200D}\\p{Emoji}" + modifiers + ")+",
+        // Emoji character w/o ZWJ
+        "\\p{Emoji}" + modifiers,
+    ]
+    const regexpUnicodeModified = new RegExp(pieces.join("|"), "gu");
+    const match = str.match(regexpUnicodeModified);
+
+    return match ?  match[0] : "";
 }
 
 function emojifyFavicon() {
